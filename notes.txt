@@ -1,0 +1,20 @@
+step1: Argument validation:
+
+1. correct call:
+	./pipex file1 cmd1 cmd2 file 2 -> argc == 5
+2. check file1 exists and can be read
+3. check file2 can be created/truncated and written to
+4. any check fails should print an error and exit gracefully
+
+step2: Command Path Discovery
+
+1. when you type ls -l the shell finds the actual executable file /bin/ls
+	it does this by checking every directory in the environment variable PATH
+	For the program we need to do the same for both cmd1 and cmd2
+	Thats why we'll build *get_cmd_path(char *cmd, char **emvp);
+2. what will this function do:
+	1. Extract the PATH variable from emvp
+	2. Split it by : into directories
+	3. Append cmd to each directory (/usr/bin/ls, bin/ls, etc)
+	4. Use access(path, X_OK) to check if it's executable
+	5. Return the first valid full path
