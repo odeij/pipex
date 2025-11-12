@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                        :+:      :+:    :+:   */
+/*   ft_substr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,34 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-char	**parse_cmd(char *cmd)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	if (cmd == NULL || *cmd == '\0')
+	char	*sub;
+	size_t	s_len;
+	size_t	i;
+
+	if (s == NULL)
 		return (NULL);
-	return (ft_split(cmd, ' '));
-}
-
-void	execute_cmd(char *cmd, char **envp)
-{
-	char	**argv;
-	char	*cmd_path;
-
-	argv = parse_cmd(cmd);
-	if (argv == NULL || argv[0] == NULL)
-		error_exit("pipex: failed to parse command");
-	cmd_path = get_cmd_path(argv[0], envp);
-	if (cmd_path == NULL)
+	s_len = ft_strlen(s);
+	if (start >= s_len)
+		return (ft_strdup(""));
+	if (len > s_len - start)
+		len = s_len - start;
+	sub = (char *)malloc(sizeof(char) * (len + 1));
+	if (sub == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		free_split(argv);
-		cmd_not_found(argv[0]);
+		sub[i] = s[start + i];
+		i++;
 	}
-	if (execve(cmd_path, argv, envp) == -1)
-	{
-		free(cmd_path);
-		free_split(argv);
-		perror_exit("pipex: execve");
-	}
+	sub[len] = '\0';
+	return (sub);
 }
 

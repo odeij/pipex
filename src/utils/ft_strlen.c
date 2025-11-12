@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,34 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-char	**parse_cmd(char *cmd)
+size_t	ft_strlen(const char *s)
 {
-	if (cmd == NULL || *cmd == '\0')
-		return (NULL);
-	return (ft_split(cmd, ' '));
-}
+	size_t	len;
 
-void	execute_cmd(char *cmd, char **envp)
-{
-	char	**argv;
-	char	*cmd_path;
-
-	argv = parse_cmd(cmd);
-	if (argv == NULL || argv[0] == NULL)
-		error_exit("pipex: failed to parse command");
-	cmd_path = get_cmd_path(argv[0], envp);
-	if (cmd_path == NULL)
-	{
-		free_split(argv);
-		cmd_not_found(argv[0]);
-	}
-	if (execve(cmd_path, argv, envp) == -1)
-	{
-		free(cmd_path);
-		free_split(argv);
-		perror_exit("pipex: execve");
-	}
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }
 

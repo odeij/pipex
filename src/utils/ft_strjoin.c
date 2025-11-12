@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,34 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-char	**parse_cmd(char *cmd)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	if (cmd == NULL || *cmd == '\0')
+	char	*join;
+	size_t	len1;
+	size_t	len2;
+	size_t	i;
+
+	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	return (ft_split(cmd, ' '));
-}
-
-void	execute_cmd(char *cmd, char **envp)
-{
-	char	**argv;
-	char	*cmd_path;
-
-	argv = parse_cmd(cmd);
-	if (argv == NULL || argv[0] == NULL)
-		error_exit("pipex: failed to parse command");
-	cmd_path = get_cmd_path(argv[0], envp);
-	if (cmd_path == NULL)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	join = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (join == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len1)
 	{
-		free_split(argv);
-		cmd_not_found(argv[0]);
+		join[i] = s1[i];
+		i++;
 	}
-	if (execve(cmd_path, argv, envp) == -1)
+	i = 0;
+	while (i < len2)
 	{
-		free(cmd_path);
-		free_split(argv);
-		perror_exit("pipex: execve");
+		join[len1 + i] = s2[i];
+		i++;
 	}
+	join[len1 + len2] = '\0';
+	return (join);
 }
 

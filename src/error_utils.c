@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                        :+:      :+:    :+:   */
+/*   error_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,32 +12,24 @@
 
 #include "../includes/pipex.h"
 
-char	**parse_cmd(char *cmd)
+void	error_exit(char *msg)
 {
-	if (cmd == NULL || *cmd == '\0')
-		return (NULL);
-	return (ft_split(cmd, ' '));
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	exit(EXIT_FAILURE);
 }
 
-void	execute_cmd(char *cmd, char **envp)
+void	perror_exit(char *msg)
 {
-	char	**argv;
-	char	*cmd_path;
+	perror(msg);
+	exit(EXIT_FAILURE);
+}
 
-	argv = parse_cmd(cmd);
-	if (argv == NULL || argv[0] == NULL)
-		error_exit("pipex: failed to parse command");
-	cmd_path = get_cmd_path(argv[0], envp);
-	if (cmd_path == NULL)
-	{
-		free_split(argv);
-		cmd_not_found(argv[0]);
-	}
-	if (execve(cmd_path, argv, envp) == -1)
-	{
-		free(cmd_path);
-		free_split(argv);
-		perror_exit("pipex: execve");
-	}
+void	cmd_not_found(char *cmd)
+{
+	write(2, "pipex: command not found: ", 26);
+	write(2, cmd, ft_strlen(cmd));
+	write(2, "\n", 1);
+	exit(127);
 }
 

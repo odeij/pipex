@@ -1,0 +1,57 @@
+# Compiled executables
+pipex
+pipex_bonus
+
+# Object files
+*.o
+*.a
+*.so
+
+# Build directories
+build/
+obj/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Temporary files
+*.tmp
+*.log
+*.out
+
+# Test files (optional - remove if you want to include test files)
+test_*
+*_test.txt
+result.txt
+output.txt
+
+# Backup files
+*.bak
+*.backup
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
