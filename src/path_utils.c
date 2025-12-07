@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_utils.c                                        :+:      :+:    :+:   */
+/*   path_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -54,12 +54,28 @@ void	free_split(char **arr)
 	free(arr);
 }
 
+static char	*search_path_dirs(char *cmd, char **path_dirs)
+{
+	char	*full_path;
+	int		i;
+
+	i = 0;
+	while (path_dirs[i] != NULL)
+	{
+		full_path = build_cmd_path(path_dirs[i], cmd);
+		if (full_path != NULL && access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
+		i++;
+	}
+	return (NULL);
+}
+
 char	*get_cmd_path(char *cmd, char **envp)
 {
 	char	*path_var;
 	char	**path_dirs;
-	char	*full_path;
-	int		i;
+	char	*result;
 
 	if (cmd == NULL || *cmd == '\0')
 		return (NULL);
@@ -75,19 +91,7 @@ char	*get_cmd_path(char *cmd, char **envp)
 	path_dirs = ft_split(path_var, ':');
 	if (path_dirs == NULL)
 		return (NULL);
-	i = 0;
-	while (path_dirs[i] != NULL)
-	{
-		full_path = build_cmd_path(path_dirs[i], cmd);
-		if (full_path != NULL && access(full_path, X_OK) == 0)
-		{
-			free_split(path_dirs);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
-	}
+	result = search_path_dirs(cmd, path_dirs);
 	free_split(path_dirs);
-	return (NULL);
+	return (result);
 }
-

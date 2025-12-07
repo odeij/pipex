@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                           :+:      :+:    :+:   */
+/*   heredoc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,47 +12,44 @@
 
 #include "../../includes/pipex.h"
 
-static int	check_heredoc(char *arg)
+static int	append_char(char **line, char c)
 {
-	if (ft_strncmp(arg, "here_doc", 8) == 0 && arg[8] == '\0')
-		return (1);
-	return (0);
+	char	*new_line;
+	size_t	len;
+	size_t	i;
+
+	len = ft_strlen(*line);
+	new_line = (char *)malloc(len + 2);
+	if (new_line == NULL)
+		return (0);
+	i = 0;
+	while (i < len)
+	{
+		new_line[i] = (*line)[i];
+		i++;
+	}
+	new_line[len] = c;
+	new_line[len + 1] = '\0';
+	free(*line);
+	*line = new_line;
+	return (1);
 }
 
 static char	*read_line(void)
 {
-	char	buffer[1];
+	char	buffer;
 	char	*line;
-	char	*temp;
-	char	*new_line;
 	int		read_bytes;
-	size_t	len;
 
 	line = ft_strdup("");
 	if (line == NULL)
 		return (NULL);
-	while ((read_bytes = read(0, buffer, 1)) > 0)
+	read_bytes = read(0, &buffer, 1);
+	while (read_bytes > 0 && buffer != '\n')
 	{
-		if (buffer[0] == '\n')
-			break ;
-		len = ft_strlen(line);
-		temp = line;
-		new_line = (char *)malloc(sizeof(char) * (len + 2));
-		if (new_line == NULL)
-		{
-			free(line);
+		if (!append_char(&line, buffer))
 			return (NULL);
-		}
-		len = 0;
-		while (temp[len] != '\0')
-		{
-			new_line[len] = temp[len];
-			len++;
-		}
-		new_line[len] = buffer[0];
-		new_line[len + 1] = '\0';
-		free(line);
-		line = new_line;
+		read_bytes = read(0, &buffer, 1);
 	}
 	if (read_bytes == -1)
 	{
@@ -110,6 +107,7 @@ int	is_heredoc(int argc, char **argv)
 {
 	if (argc < 6)
 		return (0);
-	return (check_heredoc(argv[1]));
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0 && argv[1][8] == '\0')
+		return (1);
+	return (0);
 }
-

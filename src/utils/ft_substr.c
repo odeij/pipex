@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                         :+:      :+:    :+:   */
+/*   ft_substr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,4 +37,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	sub[len] = '\0';
 	return (sub);
 }
-

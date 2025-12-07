@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                          :+:      :+:    :+:   */
+/*   ft_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -56,19 +56,11 @@ static void	free_array(char **arr, size_t len)
 	free(arr);
 }
 
-char	**ft_split(char const *s, char c)
+static int	fill_words(char **result, size_t word_count, char const *s, char c)
 {
-	char	**result;
-	size_t	word_count;
 	size_t	i;
 	size_t	start;
 
-	if (s == NULL)
-		return (NULL);
-	word_count = count_words(s, c);
-	result = (char **)malloc(sizeof(char *) * (word_count + 1));
-	if (result == NULL)
-		return (NULL);
 	i = 0;
 	start = 0;
 	while (i < word_count)
@@ -77,11 +69,26 @@ char	**ft_split(char const *s, char c)
 		if (result[i] == NULL)
 		{
 			free_array(result, i);
-			return (NULL);
+			return (0);
 		}
 		i++;
 	}
 	result[word_count] = NULL;
-	return (result);
+	return (1);
 }
 
+char	**ft_split(char const *s, char c)
+{
+	char	**result;
+	size_t	word_count;
+
+	if (s == NULL)
+		return (NULL);
+	word_count = count_words(s, c);
+	result = (char **)malloc(sizeof(char *) * (word_count + 1));
+	if (result == NULL)
+		return (NULL);
+	if (!fill_words(result, word_count, s, c))
+		return (NULL);
+	return (result);
+}

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                             :+:      :+:    :+:   */
+/*   pipex.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -44,6 +44,26 @@ void	execute_cmd(char *cmd, char **envp);
 void	error_exit(char *msg);
 void	perror_exit(char *msg);
 void	cmd_not_found(char *cmd);
+
+typedef struct s_pipex
+{
+	int		infile;
+	int		outfile;
+	int		pipe_fd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+	char	**av;
+	char	**envp;
+}	t_pipex;
+
+typedef struct s_multi_ctx
+{
+	int		argc;
+	char	**argv;
+	char	**envp;
+	int		is_hd;
+	int		infile;
+}	t_multi_ctx;
 
 int		is_heredoc(int argc, char **argv);
 int		handle_heredoc(char *limiter);

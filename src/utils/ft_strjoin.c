@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojamaled <ojamaled@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,33 +12,33 @@
 
 #include "../../includes/pipex.h"
 
+static void	copy_str(char *dst, char const *src, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*join;
 	size_t	len1;
 	size_t	len2;
-	size_t	i;
 
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	join = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	join = (char *)malloc(len1 + len2 + 1);
 	if (join == NULL)
 		return (NULL);
-	i = 0;
-	while (i < len1)
-	{
-		join[i] = s1[i];
-		i++;
-	}
-	i = 0;
-	while (i < len2)
-	{
-		join[len1 + i] = s2[i];
-		i++;
-	}
+	copy_str(join, s1, len1);
+	copy_str(join + len1, s2, len2);
 	join[len1 + len2] = '\0';
 	return (join);
 }
-
